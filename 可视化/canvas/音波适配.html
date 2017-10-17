@@ -10,9 +10,11 @@
         * {
             margin: 0px;
         }
-        html,body{
-            width:100%;
-            height:100%;
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
@@ -23,30 +25,25 @@
         function VoiceWave(opt) {
             this.opt = opt || {};
             if (!devicePixelRatio) devicePixelRatio = 1;
-            this.width = document.body.clientWidth; 
+            this.width = document.body.clientWidth;
             this.height = this.width / 5
             this.canvas = document.createElement('canvas');
             //this.canvas.style.border = "solid 1px red";
             this.canvas.id = "canvas";
             (this.opt.container || document.body).appendChild(this.canvas);
-            document.getElementById("canvas").width = this.width-2
+            document.getElementById("canvas").width = this.width
             document.getElementById("canvas").height = this.height
             console.log(this.width)
             this.ctx = this.canvas.getContext('2d');
-           
+
             this.count = 0;
             this.A = 0.5;
             this.timer;
         }
         VoiceWave.prototype = {
-            _clear: function () {
-                this.ctx.fillRect(0, 0, this.width, this.height);
-                this.ctx.fillStyle="white";
-                
-            },
-            _drawLine: function (attenuation, color,width,w) {
+            _drawLine: function (attenuation, color, width, w) {
                 this.ctx.beginPath();
-                this.ctx.strokeStyle = color;  
+                this.ctx.strokeStyle = color;
                 this.ctx.lineWidth = width;
                 //this.ctx.fillRect(0, 0, this.width, this.height);
                 var x, y;
@@ -61,20 +58,21 @@
                 this.ctx.stroke();
             },
             _draw: function () {
-                this._clear()
+                this.ctx.fillRect(0, 0, this.width, this.height);
+                this.ctx.fillStyle = "white";
 
-                this._drawLine(-1, 'rgba(246,177,179,1)',2,2);
-                this._drawLine(-0.5, 'rgba(229,255,198,1)',2,3);
-                this._drawLine(0.8, 'rgba(136,175,218,1)',1,3);
-                this._drawLine(0.5, 'rgba(144,219,201,1)',2,3);
-                this._drawLine(1, 'rgba(250,233,119,1)',2,2);
-                
-                this.count += 2;Math.PI;
+                this._drawLine(-1, 'rgba(246,177,179,1)', 2, 2);
+                this._drawLine(-0.5, 'rgba(229,255,198,1)', 2, 3);
+                this._drawLine(0.8, 'rgba(136,175,218,1)', 1, 3);
+                this._drawLine(0.5, 'rgba(144,219,201,1)', 2, 3);
+                this._drawLine(1, 'rgba(250,233,119,1)', 2, 2);
+
+                this.count += 2; Math.PI;
                 if (this.timer) {
-                     clearInterval(this.timer)
-                   //cancelAnimationFrame(this.timer)
+                    clearInterval(this.timer)
+                    //cancelAnimationFrame(this.timer)
                 }
-                this.timer = setInterval(this._draw.bind(this), 80)
+                this.timer = setInterval(this._draw.bind(this), this.A<0.5?80:10)
 
                 //this.timer=requestAnimationFrame(this._draw.bind(this));
             },
